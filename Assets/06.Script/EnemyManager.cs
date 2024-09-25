@@ -20,17 +20,22 @@ public class EnemyManager : MonoBehaviour
     }
     IEnumerator Start()//start는 코루틴으로 사용 할 수 있다.
     {
+        enemyList = new List<Enemy>();
         while (true)
         {
             //적 프레팝으로 오브젝트를 생성하고 enemy 스크립트 연결
             Enemy enemy = Instantiate(enemyPrefab, transform).GetComponent<Enemy>();
             //적 초기화
             enemy.Init();
-            yield return new WaitForSeconds(spawnTime);
+            //적을 리스트에 넣기
+            enemyList.Add(enemy);
+            yield return new WaitForSeconds(spawnTime);//생성시간 기다렸다 다음 적 생성
         }
     }
     public void DestroyEnemy(Enemy enemy)
     {
+        //적 리스트에서 지정한 적 지우기
+        enemyList.Remove(enemy);
         Destroy(enemy.gameObject);
     }
 }

@@ -38,6 +38,9 @@ public class TowerSpawner : MonoBehaviour
     }
     private void SpawnTower(Transform tileTransform)
     {
-        Instantiate(TowerPrefeb,tileTransform.position, Quaternion.identity);
+        //타워 프리팹으로 타워 생성
+        GameObject clone = Instantiate(TowerPrefeb,tileTransform.position, Quaternion.identity, transform);
+        //타워 무기 초기화.
+        clone.GetComponent<TowerWeapon>().Init();
     }
 }
