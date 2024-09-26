@@ -5,14 +5,31 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float MoveSpeed = 1.0f;
+    [SerializeField] private float maxHP = 5.0f;//최대 체력
+    private bool isDie;//사망상태
     private int currentIndex;//현재 경로 인덱스.
+    private float currentHP;//현재 체력
+    private Animator anim;//에니매이션 제어용 에니매이터
     private EnemyManager emi;//너무 길어서 요약함.
+
+    public float MaxHP => maxHP;//최대 체력 프로퍼티
+    public float CurrentHP => currentHP;//현재 체력 프로퍼티.
+
+    /// <summary>
+    /// 적을 생성한 후 반드시 처음에 한번은 호출해줘야 함. 적을 초기화.
+    /// </summary>
     public void Init()
     {
         emi = EnemyManager.instance;//요약 여기서 선언함.
         currentIndex = 0;//인덱스 0시작.
         //위치는 시작인덱스에서 해당하는 경로 위치롤 지정
         transform.position = emi.WayPoints[currentIndex].position;
+        //애니메이터 연결
+        anim = GetComponent<Animator>();
+        //현재 체력을 최대치로 초기화
+        currentHP = maxHP;
+        //살아있는 상태로 시작
+        isDie = false;
     }
     private void Update()
     {
@@ -35,5 +52,25 @@ public class Enemy : MonoBehaviour
     public void OnDie()
     {
         EnemyManager.instance.DestroyEnemy(this);//메니저에서 삭제 처리.
+    }
+    public void TakeDamage(float damage)
+    {
+        if(isDie)
+        {//죽은 생태이면 더 이상 데미지를 받지 않도록 리턴
+            return;
+        }
+        if(!isDie) 
+        {//데미지만큼 현재 체력 감소
+            currentHP = currentHP - damage;
+        }
+        if(currentHP <= 0)//체력이 0 이하인지 검사
+        {
+            isDie = true;//죽은 상태로 만들고
+            OnDie();//삭제
+        }
+        else//아니면
+        {
+            anim.SetTrigger("HIT");//피격 애니메이션 실행
+        }
     }
 }

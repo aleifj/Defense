@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public enum WeaponState//타워 상태
@@ -15,6 +16,7 @@ public class TowerWeapon : MonoBehaviour
     [SerializeField] private Transform spawnPoint;//탄환 생성 위치.
     [SerializeField] private float attactRate = 5.0f;//탄환 발사 간격.
     [SerializeField] private float attackRange = 2.0f;//탄환 생성 범위.
+    [SerializeField] private float attakDamage = 1.0f;//공격력
     private WeaponState weaponState = WeaponState.SearchTarget;
     private Transform attackTarget = null;//공격 목표.
     public void Init()
@@ -29,7 +31,12 @@ public class TowerWeapon : MonoBehaviour
     }
     void Update()
     {
-        
+        //공격 중
+        if(attackTarget != null)
+        {
+            //타워 회전(위를 향하고 있는 스프라이트이므로 up이다)
+            transform.up = attackTarget.position - transform.position;
+        }
     }
     private IEnumerator SearchTarget()
     {
@@ -100,6 +107,6 @@ public class TowerWeapon : MonoBehaviour
         //발사체프리팹서 탄환 생성
         GameObject clone = Instantiate(projectilePreFab, spawnPoint.position, Quaternion.identity, transform);
         //발사체에 공격 목표 설정
-        clone.GetComponent<Projectile>().SetTarget(attackTarget);
+        clone.GetComponent<Projectile>().SetTarget(attackTarget, attakDamage);
     }
 }

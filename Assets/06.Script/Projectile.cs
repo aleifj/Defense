@@ -6,9 +6,11 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 6.0f;//탄환속도
     private Transform target;//공격 목표.
-    public void SetTarget(Transform tr)
+    private float damage = 0f;//데미지.
+    public void SetTarget(Transform tr, float indamage)
     {
         target = tr;//공격목표 지정.
+        this.damage = indamage;//데미지 값 설정
     }
     void Start()
     {
@@ -28,15 +30,15 @@ public class Projectile : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!collision.CompareTag("ENEMY"))
+        if(!collision.CompareTag("ENEMY"))//태그가 적이 아니면 리턴
         {
             return;
         }
-        if(collision.transform != target)
+        if(collision.transform != target)//충돌한 오브젝트가 목표가 아니면 리턴
         {
             return;
         }
-        collision.GetComponent<Enemy>().OnDie();
+        collision.GetComponent<Enemy>().TakeDamage(damage);//충돌한 적에게 데미지 주기
         Destroy(gameObject);
     }
 }
