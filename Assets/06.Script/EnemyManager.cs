@@ -40,8 +40,25 @@ public class EnemyManager : MonoBehaviour
             yield return new WaitForSeconds(spawnTime);//생성시간 기다렸다 다음 적 생성
         }
     }
-    public void DestroyEnemy(Enemy enemy)
+
+    /// <summary>
+    /// 적 삭제 처기
+    /// </summary>
+    /// <param name="enemy">삭제 해야할 오브젝트</param>
+    /// <param name="gold">Goal도착잉 아닌 경우 추가할 골드</param>
+    /// <param name="isArrivedGoal">Goal 도착 여부</param>
+    public void DestroyEnemy(Enemy enemy, int gold, bool isArrivedGoal)
     {
+        if(isArrivedGoal)//Goal에 도착했다면
+        {
+            //플레이어에게 데미지
+            PlayerManager.instance.TakeDamage(1);//함수형식의 메서드는 이런식으로 코딩.
+        }
+        else//아니면
+        {
+            //골드 증가
+            PlayerManager.instance.CurrentGold = PlayerManager.instance.CurrentGold + gold;//프로퍼티 형식의 메서드는 이런식으로 코딩.
+        }
         //적 리스트에서 지정한 적 지우기
         enemyList.Remove(enemy);
         Destroy(enemy.gameObject);
