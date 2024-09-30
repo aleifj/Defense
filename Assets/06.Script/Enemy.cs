@@ -58,6 +58,10 @@ public class Enemy : MonoBehaviour
     {
         EnemyManager.instance.DestroyEnemy(this, gold, isArrivedGoal);//메니저에서 삭제 처리하면서 골드 처리.
     }
+    /// <summary>
+    /// 적에게 딜 넣기.
+    /// </summary>
+    /// <param name="damage">데미지 양</param>
     public void TakeDamage(float damage)
     {
         if(isDie)

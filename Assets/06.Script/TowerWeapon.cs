@@ -19,6 +19,10 @@ public class TowerWeapon : MonoBehaviour
     [SerializeField] private float attakDamage = 1.0f;//공격력
     private WeaponState weaponState = WeaponState.SearchTarget;
     private Transform attackTarget = null;//공격 목표.
+
+    /// <summary>
+    /// 타워 생성 후 초기화로 반드시 한번 호출
+    /// </summary>
     public void Init()
     {
         ChangeState(WeaponState.SearchTarget);//적 탐색으로 초기화
@@ -29,7 +33,7 @@ public class TowerWeapon : MonoBehaviour
         weaponState = newState;//상태 바꾸기
         StartCoroutine(weaponState.ToString());//새로운 코루틴 시작
     }
-    void Update()
+    private void Update()
     {
         //공격 중
         if(attackTarget != null)

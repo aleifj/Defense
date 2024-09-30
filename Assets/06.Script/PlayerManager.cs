@@ -36,6 +36,10 @@ public class PlayerManager : MonoBehaviour
         //현재 체력은 최대체력으로 초기화.
         currentHP = maxHP;
     }
+    /// <summary>
+    /// 유저가 받는 데미지
+    /// </summary>
+    /// <param name="damage">유저가 받을 데미지 양</param>
     public void TakeDamage(float damage)
     {
         //데미지 양 만큼 체력을 감소시킴.
