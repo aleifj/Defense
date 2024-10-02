@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Timeline;
@@ -12,19 +13,33 @@ public enum WeaponState//타워 상태
 }
 public class TowerWeapon : MonoBehaviour
 {
+    [SerializeField] private TowerTemplate towerTemplate;
     [SerializeField] private GameObject projectilePreFab;//발사체 프리팹.
     [SerializeField] private Transform spawnPoint;//탄환 생성 위치.
-    [SerializeField] private float attactRate = 5.0f;//탄환 발사 간격.
-    [SerializeField] private float attackRange = 2.0f;//탄환 생성 범위.
-    [SerializeField] private float attakDamage = 1.0f;//공격력
     private WeaponState weaponState = WeaponState.SearchTarget;
     private Transform attackTarget = null;//공격 목표.
+    private SpriteRenderer spriteRenderer;
+    private int level = 0;//타워 레벨
+    
+    #region Property
+    public Sprite TowerSprite => towerTemplate.weapon[level].sprite;//레벨에 따른 타워 이미지 프로퍼티
+    public int Level => level +1;//타워 레벨 프로퍼티
+    public float Damage => towerTemplate.weapon[level].damage;//공격력 프러퍼티
+    public float Rate => towerTemplate.weapon[level].rate;//발사간격 프로퍼티
+    public float Range => towerTemplate.weapon[level].range;//생성범위 프로퍼티
+    public int CostUpgrade => Level < MaxLevel ? towerTemplate.weapon[level + 1].cost : 0;//
+    public int CostSell => towerTemplate.weapon[level].sell;//판매비용 프로퍼티
+    public int MaxLevel => towerTemplate.weapon.Length;//최대 레벨
+
+    #endregion Property
+
 
     /// <summary>
     /// 타워 생성 후 초기화로 반드시 한번 호출
     /// </summary>
     public void Init()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         ChangeState(WeaponState.SearchTarget);//적 탐색으로 초기화
     }
     private void ChangeState(WeaponState newState)
@@ -54,7 +69,7 @@ public class TowerWeapon : MonoBehaviour
                 //두 오브젝트 사이의 거리를 측정
                 float bothObject = Vector3.Distance(item.transform.position, this.transform.position);
                 //공격 사정거리 안에 있ㅇ면서 가장 긴 거리보다 작으면 
-                if((bothObject < attackRange) && (bothObject <= closestDistance))
+                if((bothObject < towerTemplate.weapon[level].range) && (bothObject <= closestDistance))
                 {
                     //현재 거리를 최단 거리로 지정
                     closestDistance = bothObject;
@@ -90,7 +105,7 @@ public class TowerWeapon : MonoBehaviour
             //적과의 거리 측정
             float distance = Vector3.Distance(attackTarget.position, this.transform.position);
             //거리가 공격범위를 벗어나면
-            if(distance > attackRange)
+            if(distance > towerTemplate.weapon[level].range)
             {
                 //공격 목표를 없에고
                 attackTarget = null;
@@ -100,7 +115,7 @@ public class TowerWeapon : MonoBehaviour
                 break;
             }
             //발사간격만큼 기다린 후 다시 공격
-            yield return new WaitForSeconds(attactRate);
+            yield return new WaitForSeconds(towerTemplate.weapon[level].rate);
             //발사체 생성
             SpawnProjectile();
         }
@@ -110,7 +125,35 @@ public class TowerWeapon : MonoBehaviour
     {
         //발사체프리팹서 탄환 생성
         GameObject clone = Instantiate(projectilePreFab, spawnPoint.position, Quaternion.identity, transform);
-        //발사체에 공격 목표 설정
-        clone.GetComponent<Projectile>().SetTarget(attackTarget, attakDamage);
+        //발사체에 공격 목표 설정, 공격력도 전달
+        clone.GetComponent<Projectile>().SetTarget(attackTarget, towerTemplate.weapon[level].damage);
+    }
+
+    /// <summary>
+    /// 타워가 업그레이드 가능한지 검사하고 가능하면 업그레이드.
+    /// </summary>
+    /// <returns>업그레이드 가능 여부</returns>
+    public bool UpGrade()
+    {
+        //가진 돈이 현재 레벨보다 1 큰 비용보다 적은지 검사
+        if(PlayerManager.instance.CurrentGold < towerTemplate.weapon[level + 1].cost)
+        {
+            return false;//실패 리턴
+        }
+        level++;
+        spriteRenderer.sprite = towerTemplate.weapon[level].sprite;
+        PlayerManager.instance.CurrentGold -= towerTemplate.weapon[level].cost;
+        return true;
+    }
+
+    /// <summary>
+    /// 타워 판매
+    /// </summary>
+    public void Sell()
+    {
+        //판매 비용 추가
+        PlayerManager.instance.CurrentGold += towerTemplate.weapon[level].sell;
+        //타워 오브젝트 삭제
+        Destroy(gameObject);
     }
 }

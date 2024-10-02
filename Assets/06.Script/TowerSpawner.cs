@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TowerSpawner : MonoBehaviour
 {
+    [SerializeField] private TowerTemplate towerTemplate;
     [SerializeField] private GameObject TowerPrefeb;//타워 프리팹 연결
-    [SerializeField] private int TowerBuildGold = 50;//타워 건설 요구금.
     private ContactFilter2D filter;//raycast용 파라미터
     private List<RaycastHit2D> rcList;//Raycast결과 저장용 리스트.
     
@@ -39,13 +39,14 @@ public class TowerSpawner : MonoBehaviour
     }
     private void SpawnTower(Transform tileTransform)
     {
-        //건설 소요 비용이 소지골드보다 크면 리턴
-        if(TowerBuildGold > PlayerManager.instance.CurrentGold)
+        //타워템플릿에 등록된[0번에]금액이 소지골드보다 크면 리턴
+        if(towerTemplate.weapon[0].cost > PlayerManager.instance.CurrentGold)
         {
+            //todo 건설 불가 메세지 출력.
             return;
         }
-        //소지골드에서 건설비용 차감
-        PlayerManager.instance.CurrentGold = PlayerManager.instance.CurrentGold - TowerBuildGold;
+        //소지골드에서 타워템플릿에 등록된[0번에] 금액 차감
+        PlayerManager.instance.CurrentGold = PlayerManager.instance.CurrentGold - towerTemplate.weapon[0].cost;
 
         //타워 프리팹으로 타워 생성
         GameObject clone = Instantiate(TowerPrefeb,tileTransform.position, Quaternion.identity, transform);
