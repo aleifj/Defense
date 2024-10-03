@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 public class TowerSpawner : MonoBehaviour
 {
     [SerializeField] private TowerTemplate towerTemplate;
     [SerializeField] private GameObject TowerPrefeb;//타워 프리팹 연결
+    [SerializeField] private infoTower infoTower; // 타워정보 패널
     private ContactFilter2D filter;//raycast용 파라미터
     private List<RaycastHit2D> rcList;//Raycast결과 저장용 리스트.
     
@@ -18,13 +19,21 @@ public class TowerSpawner : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
+            if(EventSystem.current.IsPointerOverGameObject() == true)//마우스가 UI에 있을 때 리턴.
+            {
+                return;
+            }
+
             rcList.Clear();//리스트를 클리어 먼저해야하나?
             Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);//카메라 위치기준 월드포지션값?
             Physics2D.Raycast(worldPosition, Vector2.zero, filter, rcList);//ray를 쏴서 검출되는 오브젝트 찾기
+
             foreach(var item in rcList)
             {
                 if(item.transform.CompareTag("TOWER"))//TOWER태그인 아이템이 있으면
                 {
+                    infoTower.OnPanel(item.transform);// 타워 정보 패널에 표시할 정보를 넘기고 패널 켜기
+
                     return;
                 }
             }
