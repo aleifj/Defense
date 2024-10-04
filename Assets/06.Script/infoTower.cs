@@ -7,16 +7,16 @@ using JetBrains.Annotations;
 
 public class infoTower : MonoBehaviour
 {
-    [SerializeField] private Image imageTower;
-    [SerializeField] private TextMeshProUGUI textLevel;
-    [SerializeField] private TextMeshProUGUI textDamage;
-    [SerializeField] private TextMeshProUGUI textRate;
-    [SerializeField] private TextMeshProUGUI textRange;
-    [SerializeField] private TowerAttackRange towerAttackRange;
-    [SerializeField] private TextMeshProUGUI textBtnUpgrade; 
-    [SerializeField] private TextMeshProUGUI textBtnSell;
-    [SerializeField] private Button buttonUpgrade;
-    [SerializeField] private Button buttonSell;
+    [SerializeField] private Image imageTower;//타워 이미지
+    [SerializeField] private TextMeshProUGUI textLevel;//레벨
+    [SerializeField] private TextMeshProUGUI textDamage;//공격력
+    [SerializeField] private TextMeshProUGUI textRate;//공격 속도
+    [SerializeField] private TextMeshProUGUI textRange;//공격 범위
+    [SerializeField] private TowerAttackRange towerAttackRange;//범위 이미지
+    [SerializeField] private TextMeshProUGUI textBtnUpgrade; //업그레이드 버튼 택스트
+    [SerializeField] private TextMeshProUGUI textBtnSell;//판매 버튼 텍스트
+    [SerializeField] private Button buttonUpgrade;//업그레이드 버튼
+    [SerializeField] private Button buttonSell;//판매 버튼
 
     private TowerWeapon currentTower;
 

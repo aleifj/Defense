@@ -76,8 +76,6 @@ public class TowerWeapon : MonoBehaviour
                     //공격 목표를 현재 오브젝트로 지정
                     attackTarget = item.transform;
                 }
-                    
-
             }
             //공격 목표가 null이 아니면
             if(attackTarget != null)
