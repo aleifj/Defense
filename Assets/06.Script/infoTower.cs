@@ -17,6 +17,7 @@ public class infoTower : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textBtnSell;//판매 버튼 텍스트
     [SerializeField] private Button buttonUpgrade;//업그레이드 버튼
     [SerializeField] private Button buttonSell;//판매 버튼
+    [SerializeField] private ToastMessage toastMSG;//토스트 메시지
 
     private TowerWeapon currentTower;
 
@@ -79,12 +80,13 @@ public class infoTower : MonoBehaviour
     {
         if(currentTower.UpGrade() == true)
         {
-            UpdateTowerData();
-            towerAttackRange.OnAttackRange(currentTower.transform.position, currentTower.Range);
+            UpdateTowerData();//데이터 갱신 후
+            towerAttackRange.OnAttackRange(currentTower.transform.position, currentTower.Range);//
         }
         else
         {
-            //todo 안된다
+            //돈 없을 때 건설 불가 메시지
+            toastMSG.ShowToast(ToastType.Money);//토스트 메시지 표시하는 법 ShowTast();
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class TowerTemplate : ScriptableObject//모노비헤이비 뭐시기 아님.
 {
     public GameObject towerPrefab;//타워 생성을 위한 프리팹
+    public GameObject followPrefab;//임시타워 프리펩
     public Weapon[] weapon;//레벨 별 타워 정보
     
     [System.Serializable]

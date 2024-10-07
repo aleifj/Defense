@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: TowerGun1
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 387320468732675946, guid: 948218b9be206554e8510a802fa08e46, type: 3}
+  followPrefab: {fileID: 119942326270888622, guid: 4e560e422c382a54387c8f9415856197, type: 3}
   weapon:
   - sprite: {fileID: 21300000, guid: 922a20295d1f1b4458138594d5495d1a, type: 3}
     damage: 1
