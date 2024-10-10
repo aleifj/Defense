@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8676221907966106214}
   - component: {fileID: 8676221907966106215}
   - component: {fileID: 8676221907966106212}
-  - component: {fileID: 7451498934817001742}
   - component: {fileID: 8502660672882708852}
+  - component: {fileID: 7451498934817001742}
   m_Layer: 0
   m_Name: EnemyPig
   m_TagString: ENEMY
@@ -108,21 +108,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7451498934817001742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8676221907966106213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7f3a161d13d6404b81fe1e22b4d3053, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MoveSpeed: 2
-  maxHP: 10
-  gold: 12
 --- !u!58 &8502660672882708852
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -139,3 +124,18 @@ CircleCollider2D:
   m_Offset: {x: -0.008999884, y: 0.06749913}
   serializedVersion: 2
   m_Radius: 0.3275022
+--- !u!114 &7451498934817001742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8676221907966106213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7f3a161d13d6404b81fe1e22b4d3053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MoveSpeed: 2
+  maxHP: 10
+  gold: 12

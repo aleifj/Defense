@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class TowerSpawner : MonoBehaviour
 {
-    [SerializeField] private TowerTemplate towerTemplate;
+    [SerializeField] private TowerTemplate[] towerTemplate;//타워 정보
     [SerializeField] private infoTower infoTower; // 타워정보 패널
     [SerializeField] private ToastMessage ToastMSG;//토스트 메시지
     private ContactFilter2D filter;//raycast용 파라미터
     private List<RaycastHit2D> rcList;//Raycast결과 저장용 리스트.
     private bool isOnTowerButton = false;//타워건설버튼 굴렸는지 체크
     private GameObject followTowerClone = null;//임시타워 사용완료시 삭제를 위해 저장하는 변수.
+    private int towerType;//타워의 속성
     
     void Start()
     {
@@ -58,10 +59,10 @@ public class TowerSpawner : MonoBehaviour
         //다시 건설버튼 눌러서 건설하도록 설정
         isOnTowerButton = false;
         //소지골드에서 타워템플릿에 등록된[0번에] 금액 차감
-        PlayerManager.instance.CurrentGold = PlayerManager.instance.CurrentGold - towerTemplate.weapon[0].cost;
+        PlayerManager.instance.CurrentGold = PlayerManager.instance.CurrentGold - towerTemplate[towerType].weapon[0].cost;
 
         //타워 뎀플릿에 있는 타워 프리펩으로 생성
-        GameObject clone = Instantiate(towerTemplate.towerPrefab, tileTransform.position, Quaternion.identity, transform);
+        GameObject clone = Instantiate(towerTemplate[towerType].towerPrefab, tileTransform.position, Quaternion.identity, transform);
         //타워 무기 초기화.
         clone.GetComponent<TowerWeapon>().Init();
         //임시타워 삭제
@@ -69,8 +70,10 @@ public class TowerSpawner : MonoBehaviour
         //
         StartCoroutine(OnTowerCancleSystem());
     }
-    public void ReadyToSpawnTower()
+    public void ReadyToSpawnTower(int type)
     {
+        //타워 종류 지정
+        towerType = type;
         //버튼 중복해서 누르는 경우 방지
         if(isOnTowerButton)
         {
@@ -78,7 +81,7 @@ public class TowerSpawner : MonoBehaviour
         }
 
         //타워템플릿에 등록된[0번에]금액이 소지골드보다 크면 리턴
-        if(towerTemplate.weapon[0].cost > PlayerManager.instance.CurrentGold)
+        if(towerTemplate[towerType].weapon[0].cost > PlayerManager.instance.CurrentGold)
         {
             //골드부족으로 건설 불가 메세지 출력.
             ToastMSG.ShowToast(ToastType.Money);//토스트 메시지 표시방법 ShowToast();
@@ -87,7 +90,7 @@ public class TowerSpawner : MonoBehaviour
         //타워 건설버튼 눌렸다고 설정
         isOnTowerButton = true;
         //마우스를 따라다니는 임시타워 생성
-        followTowerClone = Instantiate(towerTemplate.followPrefab);
+        followTowerClone = Instantiate(towerTemplate[towerType].followPrefab);
         //타워 건설 취소하는 코루틴 시작.
         StartCoroutine(OnTowerCancleSystem());
     }
