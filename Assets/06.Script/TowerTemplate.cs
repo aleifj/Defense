@@ -13,6 +13,7 @@ public class TowerTemplate : ScriptableObject//모노비헤이비 뭐시기 아�
     {
         public Sprite sprite;//타워이미지
         public float damage;//공격력
+        public float slow; //감속 퍼센트(0.2 = 20%)
         public float rate;//공격속도
         public float range;//공격범위
         public int cost;//건설필요골드

@@ -15,8 +15,15 @@ public class Enemy : MonoBehaviour
     private Animator anim;//에니매이션 제어용 에니매이터
     private EnemyManager emi;//너무 길어서 요약함.
     private SpriteRenderer spriteRenderer;
+    private float slow;//감속해야 하는 퍼센트 수치
+
+
     public float MaxHP => maxHP;//최대 체력 프로퍼티
     public float CurrentHP => currentHP;//현재 체력 프로퍼티.
+    public float Slow{
+        get=>slow;
+        set=>slow = Mathf.Max(0, value);//음수값은 받지 않도록
+    }
 
     /// <summary>
     /// 적을 생성한 후 반드시 처음에 한번은 호출해줘야 함. 적을 초기화.
@@ -44,6 +51,8 @@ public class Enemy : MonoBehaviour
         {
             //런모드이면 더 빠르게 이동.
             float fixedSpeed = anim.GetBool("RUN") ? MoveSpeed + 2 : MoveSpeed;
+            //감속타워 영향을 바ㅓㄷ으면 감속
+            fixedSpeed -= fixedSpeed * slow;
             //현재 위치를 frame처리시간비율로 계산한 속도만큼 옮겨줌.
             transform.position = Vector3.MoveTowards(transform.position, emi.WayPoints[currentIndex].position, fixedSpeed * Time.deltaTime);
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using JetBrains.Annotations;
+using System;
 
 public class infoTower : MonoBehaviour
 {
@@ -66,7 +67,15 @@ public class infoTower : MonoBehaviour
     {
         imageTower.sprite = currentTower.TowerSprite;//타워 이미지 변화
         textLevel.text = $"Level : {currentTower.Level}"; // 레벨
-        textDamage.text = $"Damage : {currentTower.Damage}"; // 데미지
+        //감속차워일때는 데미지 대신 감속값을 보여준다
+        if(currentTower.WeaponType == WeaponType.Slow)
+        {
+            textDamage.text = $"Slow : {currentTower.Slow * 100}%";
+        }
+        else
+        {
+            textDamage.text = $"Damage : {currentTower.Damage}"; // 데미지
+        }
         textRate.text = $"Rate : {currentTower.Rate}"; // 간격
         textRange.text = $"Range : {currentTower.Range}"; // 범위
 

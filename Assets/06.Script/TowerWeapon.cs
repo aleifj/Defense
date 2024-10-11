@@ -9,7 +9,8 @@ using UnityEngine;
 public enum WeaponType//타워 종류
 {
     Gun,//유도탄
-    Laser//레이저
+    Laser,//레이저
+    Slow//감속
 }
 public enum WeaponState//타워 상태
 {
@@ -40,11 +41,13 @@ public class TowerWeapon : MonoBehaviour
     public Sprite TowerSprite => towerTemplate.weapon[level].sprite;//레벨에 따른 타워 이미지 프로퍼티
     public int Level => level +1;//타워 레벨 프로퍼티
     public float Damage => towerTemplate.weapon[level].damage;//공격력 프러퍼티
+    public float Slow => towerTemplate.weapon[level].slow;//감속 프러퍼티
     public float Rate => towerTemplate.weapon[level].rate;//발사간격 프로퍼티
     public float Range => towerTemplate.weapon[level].range;//생성범위 프로퍼티
     public int CostUpgrade => Level < MaxLevel ? towerTemplate.weapon[level + 1].cost : 0;//
     public int CostSell => towerTemplate.weapon[level].sell;//판매비용 프로퍼티
     public int MaxLevel => towerTemplate.weapon.Length;//최대 레벨
+    public WeaponType WeaponType => weaponType;//무기 종류의 프로퍼티
 
     #endregion Property
 
